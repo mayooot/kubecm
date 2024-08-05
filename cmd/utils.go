@@ -361,8 +361,12 @@ func ExitOption(kubeItems []Needle) ([]Needle, error) {
 	if err != nil {
 		return nil, err
 	}
-	kubeItems = append(kubeItems, Needle{Name: "<Exit>", Cluster: "exit the kubecm", User: u.Username})
-	return kubeItems, nil
+
+	newKubeItems := make([]Needle, 0, len(kubeItems))
+	newKubeItems = append(newKubeItems, Needle{Name: "<Exit>", Cluster: "exit the kubecm", User: u.Username})
+	newKubeItems = append(newKubeItems, kubeItems...)
+
+	return newKubeItems, nil
 }
 
 func printService(out io.Writer, name, link string) {
