@@ -168,9 +168,9 @@ func SelectUI(kubeItems []Needle, label string) int {
 func selectUIRunner(kubeItems []Needle, label string, runner SelectRunner) (int, error) {
 	templates := &promptui.SelectTemplates{
 		Label:    "{{ . }}",
-		Active:   "\U0001F63C {{ .Name | red }}{{ .Center | red}}",
+		Active:   "\U0001F459 {{ .Name | red }}{{ .Center | red}}",
 		Inactive: "  {{ .Name | cyan }}{{ .Center | red}}",
-		Selected: "\U0001F638 Select:{{ .Name | green }}",
+		Selected: "\U0001F644 Select:{{ .Name | green }}",
 		Details: `
 --------- Info ----------
 {{ "Name:" | faint }}	{{ .Name }}
