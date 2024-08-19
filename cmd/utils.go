@@ -18,7 +18,6 @@ import (
 
 	"k8s.io/client-go/rest"
 
-	"github.com/bndr/gotabulate"
 	ct "github.com/daviddengcn/go-colortext"
 	"github.com/imdario/mergo"
 	"github.com/manifoldco/promptui"
@@ -113,42 +112,42 @@ func HashSufString(data string) string {
 func PrintTable(config *clientcmdapi.Config) error {
 	var table [][]string
 	sortedKeys := make([]string, 0)
+
+	// 收集并排序所有上下文名称
 	for k := range config.Contexts {
 		sortedKeys = append(sortedKeys, k)
 	}
+
 	sort.Strings(sortedKeys)
-	ctx := config.Contexts
+
+	// 计算最长的上下文名称长度，用于对齐
+	maxNameLength := 0
 	for _, k := range sortedKeys {
-		namespace := "default"
-		head := ""
+		if len(k) > maxNameLength {
+			maxNameLength = len(k)
+		}
+	}
+
+	// 构建表格内容
+	for _, k := range sortedKeys {
+		head := " " // 默认情况下为空格
 		if config.CurrentContext == k {
-			head = "*"
+			head = "🫐" // 当前上下文前加 *
 		}
-		if ctx[k].Namespace != "" {
-			namespace = ctx[k].Namespace
-		}
-		if config.Clusters == nil {
-			continue
-		}
-		cluster, ok := config.Clusters[ctx[k].Cluster]
-		if !ok {
-			continue
-		}
-		conTmp := []string{head, k, ctx[k].Cluster, ctx[k].AuthInfo, cluster.Server, namespace}
+		conTmp := []string{head, k}
 		table = append(table, conTmp)
 	}
 
+	// 打印表格
 	if table != nil {
-		tabulate := gotabulate.Create(table)
-		tabulate.SetHeaders([]string{"CURRENT", "NAME", "CLUSTER", "USER", "SERVER", "Namespace"})
-		// Turn On String Wrapping
-		tabulate.SetWrapStrings(true)
-		// Render the table
-		tabulate.SetAlign("center")
-		fmt.Println(tabulate.Render("grid", "left"))
+		for _, t := range table {
+			// 使用格式化字符串对齐输出
+			fmt.Printf("%s %-*s\n", t[0], maxNameLength, t[1])
+		}
 	} else {
 		return errors.New("context not found")
 	}
+
 	return nil
 }
 
@@ -168,14 +167,14 @@ func SelectUI(kubeItems []Needle, label string) int {
 func selectUIRunner(kubeItems []Needle, label string, runner SelectRunner) (int, error) {
 	templates := &promptui.SelectTemplates{
 		Label:    "{{ . }}",
-		Active:   "\U0001F459 {{ .Name | red }}{{ .Center | red}}",
+		Active:   "\U0001F449 {{ .Name | red }}{{ .Center | red}}",
 		Inactive: "  {{ .Name | cyan }}{{ .Center | red}}",
-		Selected: "\U0001F644 Select:{{ .Name | green }}",
-		Details: `
---------- Info ----------
-{{ "Name:" | faint }}	{{ .Name }}
-{{ "Cluster:" | faint }}	{{ .Cluster }}
-{{ "User:" | faint }}	{{ .User }}`,
+		Selected: "\U0001F920 Selected:{{ .Name | green }}",
+		//Details: `
+		//--------- Info ----------
+		//{{ "Name:" | faint }}	{{ .Name }}
+		//{{ "Cluster:" | faint }}	{{ .Cluster }}
+		//{{ "User:" | faint }}	{{ .User }}`,
 	}
 	searcher := func(input string, index int) bool {
 		pepper := kubeItems[index]
@@ -322,7 +321,7 @@ func WriteConfig(cover bool, file string, outConfig *clientcmdapi.Config) error 
 		if err != nil {
 			return err
 		}
-		fmt.Printf("「%s」 write successful!\n", file)
+		//fmt.Printf("「%s」 write successful!\n", file)
 
 		if !silenceTable {
 			err = PrintTable(outConfig)

@@ -23,7 +23,7 @@ func (sc *SwitchCommand) Init() {
 		Long: `
 Switch Kube Context interactively
 `,
-		Aliases: []string{"s", "sw"},
+		Aliases: []string{"s", "sw", "use"},
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 1 {
 				return errors.New("no support for more than 1 parameter")
@@ -59,7 +59,7 @@ func (sc *SwitchCommand) runSwitch(command *cobra.Command, args []string) error 
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Switched to context 「%s」\n", config.CurrentContext)
+	//fmt.Printf("Switched to context 「%s」\n", config.CurrentContext)
 	return MacNotifier(fmt.Sprintf("Switched to context [%s]\n", config.CurrentContext))
 }
 

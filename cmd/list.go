@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
@@ -22,7 +21,7 @@ func (lc *ListCommand) Init() {
 		Use:     "list",
 		Short:   "List KubeConfig",
 		Long:    "List KubeConfig",
-		Aliases: []string{"ls", "l"},
+		Aliases: []string{"ls", "l", "ll"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return lc.runList(cmd, args)
 		},
@@ -51,16 +50,16 @@ func (lc *ListCommand) runList(command *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	clusterMessage := <-clusterMessageChan
-	if clusterMessage != nil {
-		printString(os.Stdout, "Cluster check succeeded!")
-		printString(os.Stdout, "\nKubernetes version ")
-		printYellow(os.Stdout, clusterMessage.Version.GitVersion)
-		printService(os.Stdout, "\nKubernetes master", clusterMessage.Config.Host)
-		if err := MoreInfo(clusterMessage.ClientSet, os.Stdout); err != nil {
-			fmt.Println("(Error reporting can be ignored and does not affect usage.)")
-		}
-	}
+	//clusterMessage := <-clusterMessageChan
+	//if clusterMessage != nil {
+	//	printString(os.Stdout, "Cluster check succeeded!")
+	//printString(os.Stdout, "\nKubernetes version ")
+	//printYellow(os.Stdout, clusterMessage.Version.GitVersion)
+	//printService(os.Stdout, "\nKubernetes master", clusterMessage.Config.Host)
+	//if err := MoreInfo(clusterMessage.ClientSet, os.Stdout); err != nil {
+	//	fmt.Println("(Error reporting can be ignored and does not affect usage.)")
+	//}
+	//}
 	return nil
 }
 
