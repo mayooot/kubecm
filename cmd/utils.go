@@ -169,7 +169,7 @@ func selectUIRunner(kubeItems []Needle, label string, runner SelectRunner) (int,
 		Label:    "{{ . }}",
 		Active:   "\U0001F449 {{ .Name | red }}{{ .Center | red}}",
 		Inactive: "  {{ .Name | cyan }}{{ .Center | red}}",
-		Selected: "\U0001F920 Selected:{{ .Name | green }}",
+		Selected: "\U0001F920 Selected: {{ .Name | green }}",
 		//Details: `
 		//--------- Info ----------
 		//{{ "Name:" | faint }}	{{ .Name }}
