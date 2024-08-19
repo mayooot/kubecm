@@ -32,11 +32,11 @@ func (lc *ListCommand) Init() {
 }
 
 func (lc *ListCommand) runList(command *cobra.Command, args []string) error {
-	clusterMessageChan := make(chan *ClusterStatusCheck)
-	go func() {
-		info, _ := ClusterStatus(2)
-		clusterMessageChan <- info
-	}()
+	//clusterMessageChan := make(chan *ClusterStatusCheck)
+	//go func() {
+	//	info, _ := ClusterStatus(2)
+	//	clusterMessageChan <- info
+	//}()
 	config, err := clientcmd.LoadFromFile(cfgFile)
 	if err != nil {
 		return err
