@@ -32,34 +32,22 @@ func (lc *ListCommand) Init() {
 }
 
 func (lc *ListCommand) runList(command *cobra.Command, args []string) error {
-	//clusterMessageChan := make(chan *ClusterStatusCheck)
-	//go func() {
-	//	info, _ := ClusterStatus(2)
-	//	clusterMessageChan <- info
-	//}()
 	config, err := clientcmd.LoadFromFile(cfgFile)
 	if err != nil {
 		return err
 	}
+
 	config = CheckValidContext(false, config)
 	outConfig, err := filterArgs(args, config)
 	if err != nil {
 		return err
 	}
+
 	err = PrintTable(outConfig)
 	if err != nil {
 		return err
 	}
-	//clusterMessage := <-clusterMessageChan
-	//if clusterMessage != nil {
-	//	printString(os.Stdout, "Cluster check succeeded!")
-	//printString(os.Stdout, "\nKubernetes version ")
-	//printYellow(os.Stdout, clusterMessage.Version.GitVersion)
-	//printService(os.Stdout, "\nKubernetes master", clusterMessage.Config.Host)
-	//if err := MoreInfo(clusterMessage.ClientSet, os.Stdout); err != nil {
-	//	fmt.Println("(Error reporting can be ignored and does not affect usage.)")
-	//}
-	//}
+
 	return nil
 }
 
