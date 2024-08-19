@@ -54,6 +54,10 @@ func (sc *SwitchCommand) runSwitch(command *cobra.Command, args []string) error 
 		if err != nil {
 			return err
 		}
+
+		green := "\033[32m"
+		reset := "\033[0m"
+		fmt.Printf("\U0001F920 Selected: %s%s%s\n", green, args[0], reset)
 	}
 	err = WriteConfig(true, cfgFile, config)
 	if err != nil {
